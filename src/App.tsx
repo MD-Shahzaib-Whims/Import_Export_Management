@@ -4,6 +4,31 @@ import { Download } from 'lucide-react';
 import { ExcelImporter } from './components/ExcelImporter';
 import { DataTable } from './components/DataTable';
 
+// Example column groups configuration
+const initialColumnGroups = [
+  {
+    id: 'group1',
+    title: 'Personal Information',
+    columns: ['name', 'email', 'phone'],
+    subGroups: [
+      {
+        id: 'contact',
+        title: 'Contact Details',
+        columns: ['email', 'phone'],
+      },
+    ],
+  },
+  {
+    id: 'group2',
+    title: 'Additional Information',
+    columns: ['address', 'city', 'country'],
+  },
+];
+
+// Define required and optional headers
+const requiredHeaders = ['name', 'email'];
+const optionalHeaders = ['phone', 'address', 'city', 'country'];
+
 function App() {
   const [data, setData] = useState<any[]>([]);
   const [headers, setHeaders] = useState<string[]>([]);
@@ -43,7 +68,12 @@ function App() {
           <h1 className="text-2xl font-bold mb-6">Excel File Import/Export System</h1>
           
           {data.length === 0 ? (
-            <ExcelImporter onDataImported={handleDataImported} />
+            <ExcelImporter 
+              onDataImported={handleDataImported}
+              requiredHeaders={requiredHeaders}
+              optionalHeaders={optionalHeaders}
+              fileFormat=".xlsx, .xls"
+            />
           ) : (
             <div className="space-y-6">
               {isPreview && (
@@ -74,7 +104,11 @@ function App() {
                 </button>
               </div>
 
-              <DataTable data={data} columns={headers} />
+              <DataTable 
+                data={data} 
+                columns={headers}
+                initialColumnGroups={initialColumnGroups}
+              />
             </div>
           )}
         </div>
